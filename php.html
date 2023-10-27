@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Search</title>
+</head>
+<body>
+    <h1>Database Search</h1>
+    
+    <form action="search.php" method="POST">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" placeholder="Enter search term">
+        <input type="submit" value="Search">
+    </form>
+
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Get the search term from the form
+        $search = $_POST['search'];
+        
+        // Connect to the database (you need to replace these placeholders)
+        $db = new mysqli('localhost', 'username', 'password', 'database_name');
+        
+        // Check the database connection
+        if ($db->connect_error) {
+            die("Connection failed: " . $db->connect_error);
+        }
+        
+        // Construct and execute a SQL query to search for records
+        $sql = "SELECT * FROM your_table WHERE column_name LIKE '%$search%'";
+        $result = $db->query($sql);
+        
+        // Display the search results
+        if ($result->num_rows > 0) {
+            echo "<h2>Search Results:</h2>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<p>ID: " . $row['id'] . "<br>Name: " . $row['name'] . "<br>Email: " . $row['email'] . "</p>";
+            }
+        } else {
+            echo "<p>No results found.</p>";
+        }
+        
+        // Close the database connection
+        $db->close();
+    }
+    ?>
+</body>
+</html>
